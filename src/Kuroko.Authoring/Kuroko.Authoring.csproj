@@ -1,0 +1,34 @@
+<Project Sdk="Microsoft.NET.Sdk">
+
+  <!-- Kuroko のオーサリングツール（Avalonia。Windows・macOS・Linux）。映像・画像・音声から、メニュー（kuroko-tiny）と
+       字幕付きの多タイトルの krk を作る。符号化は ffmpeg を別の実行ファイルとして呼ぶ（このツールには組み込まない）。 -->
+  <PropertyGroup>
+    <OutputType>WinExe</OutputType>
+    <TargetFramework>net10.0</TargetFramework>
+    <Nullable>enable</Nullable>
+    <ImplicitUsings>enable</ImplicitUsings>
+    <RootNamespace>Kuroko.Authoring</RootNamespace>
+    <ApplicationManifest>app.manifest</ApplicationManifest>
+    <Version>0.1.0</Version>
+    <Product>Kuroko Authoring</Product>
+    <Copyright>© 2026 Takao Masuda</Copyright>
+    <!-- 実行ファイルのアイコン（元は art/icons）。窓のアイコンは同じものを AvaloniaResource で。 -->
+    <ApplicationIcon>Assets\kuroko-authoring.ico</ApplicationIcon>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <PackageReference Include="Avalonia" Version="12.1.3" />
+    <PackageReference Include="Avalonia.Desktop" Version="12.1.3" />
+    <PackageReference Include="Avalonia.Themes.Fluent" Version="12.1.3" />
+    <PackageReference Include="Avalonia.Fonts.Inter" Version="12.1.3" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <AvaloniaResource Include="Assets\**" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="../Kuroko.Authoring.Core/Kuroko.Authoring.Core.csproj" />
+  </ItemGroup>
+
+</Project>

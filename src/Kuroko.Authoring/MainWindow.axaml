@@ -1,0 +1,59 @@
+<Window xmlns="https://github.com/avaloniaui"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        x:Class="Kuroko.Authoring.MainWindow"
+        Icon="/Assets/kuroko-authoring.ico"
+        Width="1360" Height="900" MinWidth="720" MinHeight="480"
+        Title="Kuroko Authoring">
+    <DockPanel>
+        <!-- 上：プロジェクトの操作 -->
+        <StackPanel DockPanel.Dock="Top" Orientation="Horizontal" Spacing="6" Margin="8">
+            <Button Content="新規" Click="OnNew" />
+            <Button Content="開く…" Click="OnOpen" />
+            <Button Content="保存" Click="OnSave" />
+            <Button Content="名前を付けて保存…" Click="OnSaveAs" />
+            <Button Content="再生の流れ…" Click="OnShowNav" />
+            <Button Content="書き出しの設定…" Click="OnShowEncode" />
+            <Button Content="検査" Click="OnValidate" />
+            <Button x:Name="ExportButton" Content="書き出し…" Click="OnExport" />
+            <Button x:Name="CancelButton" Content="中止" Click="OnCancelExport" IsVisible="False" />
+            <Button x:Name="OpenOutputButton" Content="書き出した krk を開く" Click="OnOpenOutput" IsEnabled="False" />
+            <TextBlock Text="ffmpeg：" VerticalAlignment="Center" Margin="12,0,0,0" />
+            <TextBox x:Name="FfmpegPathBox" Width="320" PlaceholderText="空なら PATH から探す" />
+            <Button Content="参照…" Click="OnBrowseFfmpeg" />
+        </StackPanel>
+
+        <!-- 下：状態の表示 -->
+        <StackPanel DockPanel.Dock="Bottom" Margin="8,4">
+            <ProgressBar x:Name="ExportProgress" Minimum="0" Maximum="1" Height="6" IsVisible="False" Margin="0,0,0,4" />
+            <TextBlock x:Name="StatusText" Opacity="0.8" />
+        </StackPanel>
+
+        <Grid ColumnDefinitions="320,*" Margin="8,0,8,0">
+            <!-- 左：タイトルとメニューの一覧 -->
+            <Grid Grid.Column="0" RowDefinitions="Auto,*,Auto,Auto,*,Auto" Margin="0,0,8,0">
+                <TextBlock Grid.Row="0" Text="タイトル" FontWeight="SemiBold" Margin="0,0,0,4" />
+                <ListBox Grid.Row="1" x:Name="TitleList" SelectionChanged="OnTitleSelected" />
+                <StackPanel Grid.Row="2" Orientation="Horizontal" Spacing="6" Margin="0,4,0,12">
+                    <Button Content="映像を追加…" Click="OnAddTitle" />
+                    <Button Content="削除" Click="OnRemoveTitle" />
+                </StackPanel>
+                <TextBlock Grid.Row="3" Text="メニュー" FontWeight="SemiBold" Margin="0,0,0,4" />
+                <ListBox Grid.Row="4" x:Name="MenuList" SelectionChanged="OnMenuSelected" />
+                <StackPanel Grid.Row="5" Orientation="Horizontal" Spacing="6" Margin="0,4,0,8">
+                    <Button Content="背景を選んで追加…" Click="OnAddMenu" />
+                    <Button Content="削除" Click="OnRemoveMenu" />
+                </StackPanel>
+            </Grid>
+
+            <!-- 右：選んだものの内容と、検査の結果 -->
+            <Grid Grid.Column="1" RowDefinitions="*,Auto,120">
+                <Border Grid.Row="0" BorderThickness="1" BorderBrush="Gray" Padding="12">
+                    <!-- 選んだもの（タイトル・メニュー・再生の流れ）の編集画面 -->
+                    <ContentControl x:Name="EditorHost" />
+                </Border>
+                <TextBlock Grid.Row="1" Text="検査の結果" FontWeight="SemiBold" Margin="0,8,0,4" />
+                <ListBox Grid.Row="2" x:Name="ProblemList" Margin="0,0,0,8" />
+            </Grid>
+        </Grid>
+    </DockPanel>
+</Window>

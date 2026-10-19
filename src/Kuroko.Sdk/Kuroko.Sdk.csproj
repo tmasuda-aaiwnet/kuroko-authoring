@@ -1,0 +1,15 @@
+<Project Sdk="Microsoft.NET.Sdk">
+
+  <!-- Kuroko（.krk）の読み書きの SDK（MIT）。形式そのもの（JSON のモデル・読み書き・ZIP の容器・レイアウト・言語コード）と、
+       DVD-Video 互換の仮想マシン（Kuroko.DvdVm）を持つ。映像の復号・再生は含まない。
+       macOS の NativeAOT でも使うので、JSON はソース生成（KurokoJsonContext）で扱い、反射に頼らない。 -->
+  <PropertyGroup>
+    <TargetFramework>net10.0</TargetFramework>
+    <Nullable>enable</Nullable>
+    <ImplicitUsings>enable</ImplicitUsings>
+    <RootNamespace>Kuroko</RootNamespace>
+    <AssemblyName>Kuroko.Sdk</AssemblyName>
+    <IsAotCompatible>true</IsAotCompatible>
+  </PropertyGroup>
+
+</Project>

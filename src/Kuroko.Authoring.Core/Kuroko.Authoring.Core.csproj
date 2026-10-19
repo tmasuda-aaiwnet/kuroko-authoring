@@ -1,0 +1,16 @@
+<Project Sdk="Microsoft.NET.Sdk">
+
+  <!-- オーサリングの中身（画面を持たない部分）：プロジェクトのモデル・保存と、書き出し（ffmpeg を別の実行ファイルとして
+       呼んで符号化し、krk にまとめる）。画面（Kuroko.Authoring）と試験から使う。 -->
+  <PropertyGroup>
+    <TargetFramework>net10.0</TargetFramework>
+    <Nullable>enable</Nullable>
+    <ImplicitUsings>enable</ImplicitUsings>
+    <RootNamespace>Kuroko.Authoring</RootNamespace>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="../Kuroko.Sdk/Kuroko.Sdk.csproj" />
+  </ItemGroup>
+
+</Project>

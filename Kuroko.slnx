@@ -1,0 +1,5 @@
+<Solution>
+  <Project Path="src/Kuroko.Sdk/Kuroko.Sdk.csproj" />
+  <Project Path="src/Kuroko.Authoring.Core/Kuroko.Authoring.Core.csproj" />
+  <Project Path="src/Kuroko.Authoring/Kuroko.Authoring.csproj" />
+</Solution>
