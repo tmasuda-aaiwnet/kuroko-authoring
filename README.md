@@ -76,6 +76,7 @@ dotnet run --project src/Kuroko.Authoring
 | `src/Kuroko.Authoring` | オーサリングツールの画面（Avalonia。Windows・macOS・Linux）。 |
 | `samples` | 仕様のサンプル（kuroko-spec の `samples/`）を作るスクリプト（`dotnet run samples/make-samples.cs -- <出力フォルダ>`）。 |
 | `art/icons` | アイコン（オーサリングツール・変換器・krk ファイル）と、その作り方。 |
+| `packaging` | ビルド済みのもの（Releases）の作り方。Windows・Linux は `build-release.sh`、macOS は `macos/`。 |
 
 ## 変更の受け入れについて
 
