@@ -33,6 +33,7 @@ public sealed class MatroskaTrack
     public int PixelWidth, PixelHeight, DisplayWidth, DisplayHeight, DisplayUnit;
     public int FlagInterlaced, FieldOrder = -1;
     public int MatrixCoefficients = 2, Range;   // Colour（2＝未指定・0＝未指定）
+    public uint ColourSpace;          // V_UNCOMPRESSED の画素の並び（FourCC。リトルエンディアンで読んだ値。0＝無し）
     // 音声
     public double SamplingFrequency = 8000, OutputSamplingFrequency;
     public int Channels = 1, BitDepth;
@@ -250,6 +251,7 @@ public sealed class MatroskaReader : IDisposable
                 case 0x54B2: t.DisplayUnit = (int)ReadUInt(p, sz); break;
                 case 0x9A: t.FlagInterlaced = (int)ReadUInt(p, sz); break;
                 case 0x9D: t.FieldOrder = (int)ReadUInt(p, sz); break;
+                case 0x2EB524: if (sz == 4) { var cs = ReadBytes(p, 4); t.ColourSpace = (uint)(cs[0] | cs[1] << 8 | cs[2] << 16 | cs[3] << 24); } break;
                 case 0x55B0:
                 {
                     long q = p, e = p + sz;
