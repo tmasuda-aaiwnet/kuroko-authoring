@@ -7,6 +7,10 @@
 //   漢字／英数／ひらがな／カタカナは中間 iso-2022-jp バイト列へ変換して
 //   .NET の iso-2022-jp デコーダで Unicode 化する。追加シンボル（外字）は
 //   AribGaiji.Map で直接 Unicode 文字列へ置換する。
+//
+// ライセンス：ariblib（https://github.com/youzaka/ariblib）— MIT, Copyright (c) 2013 youzaka。
+// epgdump_py（https://github.com/aoi-sakura/epgdump_py に写しが残る）— MIT, Copyright (C) 2011 Yasumasa Murakami。
+// 許諾文の全文は THIRD-PARTY-NOTICES.md。
 using System;
 using System.Collections.Generic;
 using System.Text;

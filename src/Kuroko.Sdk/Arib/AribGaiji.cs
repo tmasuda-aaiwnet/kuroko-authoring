@@ -4,6 +4,10 @@
 // 割当は規格（表7-19 の Unicode 5.2 対応字）どおりに統一する（[字] のような角括弧の代替表記は使わない）。
 // 補完で 86 件を追加（90区の前半36件・91区の全49件・92区94点）。地図/施設の記号（♨ ⛲ ⚓ ✈ ⛺ ⛽ ⛴ ⛩ ☎ 等）が
 // まるごと欠けており、EPG の番組名で 〓 になっていた。92区94点だけは Unicode 割当が無いため、字形を目視して № を当てた。
+//
+// ライセンス：ariblib（https://github.com/youzaka/ariblib）— MIT, Copyright (c) 2013 youzaka。
+// epgdump_py（https://github.com/aoi-sakura/epgdump_py に写しが残る）— MIT, Copyright (C) 2011 Yasumasa Murakami。
+// 許諾文の全文は THIRD-PARTY-NOTICES.md。
 using System.Collections.Generic;
 
 namespace Kuroko.Arib;
