@@ -1,5 +1,13 @@
 # 変更履歴 / Changelog
 
+## v0.1.1
+
+- Kuroko SDK：Matroska（mkv・webm）の読み出し（`MatroskaReader`）を追加。ffmpeg の libavformat を使わずに、Kuroko の mkv を読める。
+  / Kuroko SDK: added a Matroska (mkv, webm) reader (`MatroskaReader`), so Kuroko's mkv files can be read without
+  ffmpeg's libavformat.
+- オーサリングツールの動作は v0.1.0 と変わらないため、このバージョンのビルド済みのもの（Releases）は公開しない。
+  / The authoring tool behaves exactly as in v0.1.0, so no prebuilt packages (Releases) are published for this version.
+
 ## v0.1.0 — プレビュー / Preview
 
 最初の公開。/ First public release.

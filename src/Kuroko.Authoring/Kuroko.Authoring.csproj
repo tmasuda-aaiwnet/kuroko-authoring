@@ -9,7 +9,7 @@
     <ImplicitUsings>enable</ImplicitUsings>
     <RootNamespace>Kuroko.Authoring</RootNamespace>
     <ApplicationManifest>app.manifest</ApplicationManifest>
-    <Version>0.1.0</Version>
+    <Version>0.1.1</Version>
     <Product>Kuroko Authoring</Product>
     <Copyright>© 2026 Takao Masuda</Copyright>
     <!-- 実行ファイルのアイコン（元は art/icons）。窓のアイコンは同じものを AvaloniaResource で。 -->
