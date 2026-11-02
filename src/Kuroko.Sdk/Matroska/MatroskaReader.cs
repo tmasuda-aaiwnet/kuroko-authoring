@@ -67,8 +67,7 @@ public sealed class MatroskaReader : IDisposable
     private long _clusterTime;
     private readonly Queue<MatroskaFrame> _pending = new();
     private long _skipTo = long.MinValue; // シーク後：これより前の時刻のブロックを捨てる
-    private bool _skipToKey;
-    private int _skipKeyTrack = -1;
+    private readonly List<int> _skipKeyTracks = new(); // シーク後：最初のキーフレームまでの非キーを捨てるトラック（キーが来たら外す）
 
     public long TimestampScaleNs { get; private set; } = 1_000_000;
     public double DurationTicks { get; private set; } = double.NaN;   // TimestampScale の単位
@@ -397,10 +396,10 @@ public sealed class MatroskaReader : IDisposable
             if (f.HasTimestamp && f.Timestamp < _skipTo) return true;
             _skipTo = long.MinValue;
         }
-        if (_skipToKey && f.TrackIndex == _skipKeyTrack)
+        if (_skipKeyTracks.Count > 0 && _skipKeyTracks.Contains(f.TrackIndex))
         {
             if (!f.KeyFrame) return true;
-            _skipToKey = false;
+            _skipKeyTracks.Remove(f.TrackIndex);
         }
         return false;
     }
@@ -639,20 +638,38 @@ public sealed class MatroskaReader : IDisposable
     {
         if (trackIndex < 0)
             foreach (var t in Tracks) if (t.Type == 1) { trackIndex = t.Index; break; }
-        long trackNo = trackIndex >= 0 && trackIndex < Tracks.Count ? Tracks[trackIndex].Number : -1;
+        return Seek(ticks, trackIndex >= 0 && trackIndex < Tracks.Count ? new[] { trackIndex } : Array.Empty<int>());
+    }
+
+    // 複数のトラックのキーフレームを見て、ticks 以前に**どのトラックも**キーフレームから始められる位置へ（Kuroko の fields dual の上下。
+    // 別々に符号化してあるのでキーフレームの位置が揃わない）。トラックごとに「目標以前の最後の Cue」を求め、いちばん前のものから読む。
+    // 各トラックは自分の最初のキーフレームまでの非キーを捨てる。トラックが 1 本なら Seek(ticks, trackIndex) と同じ。
+    public bool Seek(long ticks, IReadOnlyList<int> trackIndexes)
+    {
         long target = Math.Max(0, ticks);
         long clusterPos = _firstClusterPos, cueTime = 0;
         bool found = false;
         if (_cues.Count > 0)
         {
-            // そのトラックの Cue（無ければどのトラックでも）で、目標以前の最後
-            for (int pass = 0; pass < 2 && !found; pass++)
+            // トラックごとに、そのトラックの Cue で目標以前の最後。いちばん前（クラスタの位置）を採る
+            foreach (int ti in trackIndexes)
+            {
+                if (ti < 0 || ti >= Tracks.Count) continue;
+                long trackNo = Tracks[ti].Number;
                 for (int i = _cues.Count - 1; i >= 0; i--)
                 {
                     var c = _cues[i];
-                    if (pass == 0 && trackNo >= 0 && c.Track != trackNo) continue;
-                    if (c.Time <= target) { clusterPos = c.ClusterPos; cueTime = c.Time; found = true; break; }
+                    if (c.Track != trackNo || c.Time > target) continue;
+                    if (!found || c.ClusterPos < clusterPos) clusterPos = c.ClusterPos;
+                    cueTime = found ? Math.Min(cueTime, c.Time) : c.Time;
+                    found = true;
+                    break;
                 }
+            }
+            // どのトラックにも Cue が無ければ、どのトラックの Cue でも目標以前の最後
+            if (!found)
+                for (int i = _cues.Count - 1; i >= 0; i--)
+                    if (_cues[i].Time <= target) { clusterPos = _cues[i].ClusterPos; cueTime = _cues[i].Time; found = true; break; }
         }
         else
         {
@@ -666,8 +683,8 @@ public sealed class MatroskaReader : IDisposable
         // Cue の時刻（＝キーフレームの時刻）より前は捨て、キーフレームまで待つ。Cue が無いときは目標の時刻以前の最後のキーフレームを
         // 知らないので、目標までは捨てずに読み（呼び出し側が目標まで復号して捨てる）、最初のキーフレームから出す
         _skipTo = found ? cueTime : long.MinValue + 1;
-        _skipToKey = true;
-        _skipKeyTrack = trackIndex;
+        _skipKeyTracks.Clear();
+        foreach (int ti in trackIndexes) if (ti >= 0 && ti < Tracks.Count && !_skipKeyTracks.Contains(ti)) _skipKeyTracks.Add(ti);
         return true;
     }
 
